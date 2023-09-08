@@ -28,25 +28,25 @@ jobs:
         run: git clone https://github.com/flutter/flutter.git --depth 1 --branch stable "$HOME/.flutter" && echo "$HOME/.flutter/bin" >> $GITHUB_PATH && echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       - name: Interface Package Install dependencies
         run: flutter pub get
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel_interface
+        working-directory: ./platform_object_channel_interface
       - name: Interface Package Publish to pub.dev
         run: dart pub publish -f
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel_interface
+        working-directory: ./platform_object_channel_interface
       - name: Foundation Package Install dependencies
         run: flutter pub get
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel_foundation
+        working-directory: ./platform_object_channel_foundation
       - name: Foundation Package Publish to pub.dev
         run: dart pub publish -f
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel_foundation
+        working-directory: ./platform_object_channel_foundation
       - name: Android Package Install dependencies
         run: flutter pub get
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel_android
+        working-directory: ./platform_object_channel_android
       - name: Android Package Publish to pub.dev
         run: dart pub publish -f
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel_android
+        working-directory: ./platform_object_channel_android
       - name: Main Package Install dependencies
         run: flutter pub get
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel
+        working-directory: ./platform_object_channel
       - name: Main Package Publish to pub.dev
         run: dart pub publish -f
-        working-directory: ${{ inputs.working-directory }}/platform_object_channel
+        working-directory: ./platform_object_channel
