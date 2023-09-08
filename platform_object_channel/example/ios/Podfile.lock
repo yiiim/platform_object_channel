@@ -1,0 +1,23 @@
+PODS:
+  - Flutter (1.0.0)
+  - platform_object_channel_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - platform_object_channel_foundation (from `.symlinks/plugins/platform_object_channel_foundation/darwin`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  platform_object_channel_foundation:
+    :path: ".symlinks/plugins/platform_object_channel_foundation/darwin"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  platform_object_channel_foundation: aeb00a626b0f22f1f7e143b7c47d4a9ee256b58a
+
+PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+
+COCOAPODS: 1.12.0

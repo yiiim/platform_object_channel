@@ -1,0 +1,52 @@
+# .github/workflows/publish.yml
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+    # must align with the tag-pattern configured on pub.dev, often just replace
+    #  with [0-9]+.[0-9]+.[0-9]+*
+    - 'v[0-9]+.[0-9]+.[0-9]+*' # tag-pattern on pub.dev: 'v'
+    # If you prefer tags like '1.2.3', without the 'v' prefix, then use:
+    # - '[0-9]+.[0-9]+.[0-9]+*' # tag-pattern on pub.dev: ''
+    # If your repository contains multiple packages consider a pattern like:
+    # - 'my_package_name-v[0-9]+.[0-9]+.[0-9]+*'
+# Publish using the reusable workflow from dart-lang.
+jobs:
+  publish:
+    name: 'Publish to pub.dev'
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write # This is required for requesting the JWT
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository
+      - uses: actions/checkout@v3
+      # Setup Flutter SDK
+      - uses: dart-lang/setup-dart@v1
+      - name: Install Flutter
+        run: git clone https://github.com/flutter/flutter.git --depth 1 --branch stable "$HOME/.flutter" && echo "$HOME/.flutter/bin" >> $GITHUB_PATH && echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      - name: Interface Package Install dependencies
+        run: flutter pub get
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel_interface
+      - name: Interface Package Publish to pub.dev
+        run: dart pub publish -f
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel_interface
+      - name: Foundation Package Install dependencies
+        run: flutter pub get
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel_foundation
+      - name: Foundation Package Publish to pub.dev
+        run: dart pub publish -f
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel_foundation
+      - name: Android Package Install dependencies
+        run: flutter pub get
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel_android
+      - name: Android Package Publish to pub.dev
+        run: dart pub publish -f
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel_android
+      - name: Main Package Install dependencies
+        run: flutter pub get
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel
+      - name: Main Package Publish to pub.dev
+        run: dart pub publish -f
+        working-directory: ${{ inputs.working-directory }}/platform_object_channel
