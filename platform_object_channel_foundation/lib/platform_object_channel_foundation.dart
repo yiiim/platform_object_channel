@@ -110,7 +110,8 @@ class PlatformObjectChannelFoundation extends PlatformObjectChannelInterface {
     PlatformObjectChannelInterface.instance = PlatformObjectChannelFoundation();
   }
 
-  final Map<String, Map<int, FoundationPlatformObjectMessenger>> _objects = {};
+  final Map<String, Map<int, WeakReference<FoundationPlatformObjectMessenger>>> _objects = {};
+  final Map<String, Map<int, Finalizer>> _objectsFinalizer = {};
   final Map<String, int> _objectNextIdentifier = {};
   late final _methodChannel = const MethodChannel('platform_object_channel_foundation', StandardMethodCodec(PlatformObjectChannelFoundationMessageCodec()))
     ..setMethodCallHandler(
@@ -122,7 +123,7 @@ class PlatformObjectChannelFoundation extends PlatformObjectChannelInterface {
         if (object == null) {
           throw Exception('No object found for identifier: $objectIdentifier');
         }
-        return object._handlePlatformObjectInvokeMethod(call.method, arguments);
+        return object.target?._handlePlatformObjectInvokeMethod(call.method, arguments);
       },
     );
 
@@ -151,7 +152,11 @@ class PlatformObjectChannelFoundation extends PlatformObjectChannelInterface {
       FoundationPlatformObjectRef(objectIdentifier: identifier, objectType: objectType),
     );
     _objects[objectType] ??= {};
-    _objects[objectType]![identifier] = platformObject;
+    _objectsFinalizer[objectType] ??= {};
+    _objects[objectType]![identifier] = WeakReference(platformObject);
+    var finalizer = Finalizer<PlatformObjectChannelFoundation>((obj) => obj._finalizer(objectType, identifier));
+    finalizer.attach(platformObject, this, detach: platformObject);
+    _objectsFinalizer[objectType]![identifier] = finalizer;
     return platformObject;
   }
 
@@ -166,7 +171,21 @@ class PlatformObjectChannelFoundation extends PlatformObjectChannelInterface {
         "objectIdentifier": object._objectIdentifier,
       },
     );
+    _objectsFinalizer[object._name]?[object._objectIdentifier]?.detach(object);
+    _objectsFinalizer[object._name]?.remove(object._objectIdentifier);
     _objects[object._name]!.remove(object._objectIdentifier);
+  }
+
+  void _finalizer(String type, int identifier) async {
+    await _methodChannel.invokeMethod(
+      "disposeObject",
+      {
+        "objectType": type,
+        "objectIdentifier": identifier,
+      },
+    );
+    _objectsFinalizer[type]?.remove(identifier);
+    _objects[type]?.remove(identifier);
   }
 
   int _nextUniqueIdentifier(String name) {

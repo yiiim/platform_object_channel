@@ -121,28 +121,31 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.0"
   platform_object_channel_android:
     dependency: transitive
     description:
-      path: "../../platform_object_channel_android"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: platform_object_channel_android
+      sha256: eec6bc62dba90c54dcaea271fae4022b5a7e29e96a2adef913fdaeccaa12f802
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   platform_object_channel_foundation:
     dependency: transitive
     description:
-      path: "../../platform_object_channel_foundation"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: platform_object_channel_foundation
+      sha256: "3bbf2d663aaaca9b1303080f6258c9b830c3f828dcff2cb6afcbf4467ead92b4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   platform_object_channel_interface:
     dependency: transitive
     description:
-      path: "../../platform_object_channel_interface"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: platform_object_channel_interface
+      sha256: "7fe8279436e2ac169356df173b32f15d87625cc6a16dbc6bda04d16f17657e6d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+1"
   plugin_platform_interface:
     dependency: transitive
     description:
